@@ -1,13 +1,9 @@
 #include "pch.h"
 #include "ReplayPlus.h"
 
-/* Plugin Settings Window code here
+// Plugin Settings Window code here
 std::string ReplayPlus::GetPluginName() {
 	return "ReplayPlus";
-}
-
-void ReplayPlus::SetImGuiContext(uintptr_t ctx) {
-	ImGui::SetCurrentContext(reinterpret_cast<ImGuiContext*>(ctx));
 }
 
 // Render the plugin settings here
@@ -16,9 +12,7 @@ void ReplayPlus::SetImGuiContext(uintptr_t ctx) {
 void ReplayPlus::RenderSettings() {
 	ImGui::TextUnformatted("ReplayPlus plugin settings");
 }
-*/
 
-/*
 // Do ImGui rendering here
 void ReplayPlus::Render()
 {
@@ -78,4 +72,3 @@ void ReplayPlus::OnClose()
 {
 	isWindowOpen_ = false;
 }
-*/
