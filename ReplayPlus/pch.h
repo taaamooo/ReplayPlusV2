@@ -10,11 +10,15 @@
 #include <memory>
 
 #include "imgui/imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui/imgui_internal.h"
 
 #include "fmt/core.h"
 #include "fmt/ranges.h"
 
 extern std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
+extern std::shared_ptr<GameWrapper> _globalGameWrapper;
+extern std::filesystem::path _dataFolderPath;
 
 template<typename S, typename... Args>
 void LOG(const S& format_str, Args&&... args)
