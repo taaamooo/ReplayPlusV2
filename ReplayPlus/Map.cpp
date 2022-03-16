@@ -74,6 +74,8 @@ Map::Map() {
 
 void Map::OnBeginReplay() {
 	_globalGameWrapper->HookEvent("Function Engine.GameViewportClient.Tick", std::bind(&Map::OnTick, this));
+	mapName = _globalGameWrapper->GetCurrentMap();
+	//LOG(mapName);
 }
 
 void Map::OnTick() {
@@ -97,6 +99,7 @@ void Map::OnPickUpBoost(ActorWrapper boostPad, void* params, std::string eventNa
 		newBoostPad.isEmpty = getter->isEmpty;
 		newBoostPad.location = location;
 		if (location.Z > 0.0f) {
+			//LOG("Z:" + std::to_string(location.Z));
 			boostpads.push_back(newBoostPad);
 		}
 	}
@@ -119,8 +122,47 @@ bool Map::IsValueInError(float v1, float v2, float error) {
 	else return false;
 }
 
+bool Map::IsLargeBoostpad(Vector location, std::string name) {
+	if (!abs(location.X) > 3000.0f) { return false; }
+
+	// DFH Stadium, Urban Central(Dawn, Night), WasteLand, DeadeyeCanyon
+	if (name == "Stadium_P" || name == "stadium_day_p" || name == "Stadium_Foggy_P" || name == "Stadium_Race_Day_p" || name == "Stadium_Winter_P" ||
+		name == "TrainStation_Dawn_P" || name == "TrainStation_Night_P" ||
+		name == "wasteland_s_p" || name == "wasteland_Night_S_P" ||
+		name == "outlaw_p") {
+		return location.Z > 64.0f;
+	}
+	// MannField, ChampionField, RivalsArena
+	else if (name == "EuroStadium_P" || name == "EuroStadium_Night_P" || name == "EuroStadium_Rainy_P" || name == "eurostadium_snownight_p" ||
+		name == "cs_p" || name == "cs_day_p" || name == "cs_hw_p") {
+		return location.Z > 70.0f;
+	}
+	// Urban Central, BeckwithPark, ArcStadium, SaltyShores, FarmStead, ForbiddenTemple
+	else if (name == "TrainStation_P" ||
+		name == "Park_P" || name == "Park_Night_P" || name == "Park_Rainy_P" || name == "Park_Snowy_P" ||
+		name == "arc_standard_p", name == "ARC_Darc_P" ||
+		name == "beach_P" || name == "beach_night_p" ||
+		name == "farm_p" || name == "Farm_Night_P" ||
+		name == "CHN_Stadium_P" || name == "CHN_Stadium_Day_P") {
+		return location.Z > 71.0f;
+	}
+	// UtopiaStadium, NeoTokyo
+	else if (name == "UtopiaStadium_P" || name == "UtopiaStadium_Dusk_P" || name == "UtopiaStadium_Snow_P" ||
+		name == "NeoTokyo_Standard_P" || name == "NeoTokyo_Toon_p") {
+		return location.Z > 69.1f;
+	}
+	// AquaDome
+	else if (name == "Underwater_P" || name == "music_p") {
+		return location.Z == 64.0f && abs(location.X) > 3000.0f && !((1000.0f < abs(location.Y) && abs(location.Y) < 2500.0f));
+	}
+	else {
+		return false;
+	}
+}
+
 void Map::OnEndReplay() {
 	_globalGameWrapper->UnhookEvent("Function Engine.GameViewportClient.Tick");
+	boostpads.clear();
 }
 
 void Map::Render() {
@@ -150,7 +192,7 @@ void Map::Render() {
 		void* texID = boostpad_fullImage->GetImGuiTex();
 		if (boostpad.isEmpty) { texID = boostpad_emptyImage->GetImGuiTex(); }
 		ImVec2 rect = ImVec2(boostpad_emptyImage->GetSize().X, boostpad_emptyImage->GetSize().Y) * windowAspect * boostpadSizeInMap;
-		if (boostpad.location.Z > 73.0f) { rect *= 1.5f; }
+		if (IsLargeBoostpad(boostpad.location, mapName)) { rect *= 1.5f; }
 		ImVec2 locInMap = GetLocationInMap(boostpad.location, rect, arenaUpperLeftPos, arenaLowerRightPos);
 		drawList->AddImage(texID, locInMap, locInMap + rect);
 	}

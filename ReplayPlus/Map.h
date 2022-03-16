@@ -24,6 +24,7 @@ private:
 	void OnPickUpBoost(ActorWrapper boostPad, void* params, std::string eventName);
 	ImVec2 GetLocationInMap(Vector location, ImVec2 offset, ImVec2 upperleftpos, ImVec2 lowerrightpos);
 	bool IsValueInError(float v1, float v2, float error);
+	bool IsLargeBoostpad(Vector location, std::string name);
 
 	std::shared_ptr<ImageWrapper> arenaImage;
 	std::shared_ptr<ImageWrapper> ballImage;
@@ -40,6 +41,7 @@ private:
 	std::shared_ptr<BallWrapper> ball;
 	std::shared_ptr<CameraWrapper> camera;
 	ImFont* font;
+	std::string mapName;
 
 	// Cvar
 	bool isEnabled = true;
