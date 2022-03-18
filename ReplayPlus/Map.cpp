@@ -63,11 +63,11 @@ Map::Map() {
 	_globalGameWrapper->HookEventWithCaller<ActorWrapper>("Function TAGame.VehiclePickup_TA.SetNetRelevant",
 		std::bind(&Map::OnPickUpBoost, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
-	arenaImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\imgs\\arena.png", false, true);
-	ballImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\imgs\\ball.png", false, true);
-	carImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\imgs\\car.png", false, true);
-	boostpad_emptyImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\imgs\\boostpad_empty.png", false, true);
-	boostpad_fullImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\imgs\\boostpad_full.png", false, true);
+	arenaImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\arena.png", false, true);
+	ballImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\ball.png", false, true);
+	carImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\car.png", false, true);
+	boostpad_emptyImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\boostpad_empty.png", false, true);
+	boostpad_fullImage = std::make_shared<ImageWrapper>(_dataFolderPath / "replayplus\\boostpad_full.png", false, true);
 	
 	font = _globalGameWrapper->GetGUIManager().GetFont("Japanese");
 }
@@ -173,6 +173,36 @@ void Map::Render() {
 		ImGui::End();
 		return;
 	}
+
+	/*
+	if (!ImGui::BeginMenuBar()) {
+		LOG("Failed to open main menu bar.");
+		ImGui::EndMenuBar();
+		return;
+	}
+	if (ImGui::BeginMenu("File")) {
+		if (ImGui::MenuItem("Close")) {
+			isWindowOpen_ = false;
+		}
+		if (ImGui::BeginMenu("Options")) {
+			static bool enabled = true;
+			ImGui::MenuItem("Enabled", "", &enabled);
+			ImGui::BeginChild("child", ImVec2(0, 60), true);
+			for (int i = 0; i < 10; i++)
+				ImGui::Text("Scrolling Text %d", i);
+			ImGui::EndChild();
+			static float f = 0.5f;
+			static int n = 0;
+			static bool b = true;
+			ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+			ImGui::InputFloat("Input", &f, 0.1f);
+			ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+			ImGui::Checkbox("Check", &b);
+			ImGui::EndMenu();
+		}
+	}
+	ImGui::EndMenuBar();
+	*/
 
 	// Render arena image
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
